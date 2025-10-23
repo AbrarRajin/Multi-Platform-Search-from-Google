@@ -116,7 +116,8 @@ function createPlatformButton(platform, query) {
   
   // Create text span
   const textSpan = document.createElement('span');
-  textSpan.textContent = `Search ${platform.name}`;
+  textSpan.textContent = `${platform.name}`;
+  //textSpan.textContent = `Search ${platform.name}`;
   
   button.appendChild(iconDiv);
   button.appendChild(textSpan);
