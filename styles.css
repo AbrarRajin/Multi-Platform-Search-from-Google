@@ -7,13 +7,21 @@
   background: transparent;
   border-radius: 0;
   box-shadow: none;
-  width: 250px;
+  width: 160px;
   box-sizing: border-box;
+
+  /* Scroll settings */
+  overflow-y: auto;
+  max-height: fit-content; /* scrollbar ends where buttons end */
+  padding-right: 11px; /* space for scrollbar offset */
+  position: relative;
 }
 
 /* Custom scrollbar */
 #platform-search-container::-webkit-scrollbar {
   width: 6px;
+  position: absolute;
+  right: -5px; /* nudge scrollbar 5px to the right */
 }
 
 #platform-search-container::-webkit-scrollbar-track {
@@ -21,7 +29,7 @@
 }
 
 #platform-search-container::-webkit-scrollbar-thumb {
-  background: #dadce0;
+  background: #252829;
   border-radius: 3px;
 }
 
@@ -62,7 +70,7 @@
   transition: all 0.2s ease;
   font-family: Arial, sans-serif;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  width: 65%;
+  width: 100%;
   text-decoration: none !important;
   user-select: none;
   box-sizing: border-box;

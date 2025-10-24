@@ -9,67 +9,67 @@ const PLATFORMS = [
   {
     id: 'reddit',
     name: 'Reddit',
-    color: '#ff4500',
+    color: '#424242',
     url: (query) => `https://www.reddit.com/search/?q=${encodeURIComponent(query)}`
   },
   {
     id: 'pinterest',
     name: 'Pinterest',
-    color: '#e60023',
+    color: '#424242',
     url: (query) => `https://www.pinterest.com/search/pins/?q=${encodeURIComponent(query)}`
   },
   {
     id: 'twitter',
     name: 'X (Twitter)',
-    color: '#000000',
+    color: '#424242',
     url: (query) => `https://x.com/search?q=${encodeURIComponent(query)}&src=typed_query`
   },
   {
     id: 'tiktok',
     name: 'TikTok',
-    color: '#000000',
+    color: '#424242',
     url: (query) => `https://www.tiktok.com/search?q=${encodeURIComponent(query)}`
   },
   {
     id: 'linkedin',
     name: 'LinkedIn',
-    color: '#0077b5',
+    color: '#424242',
     url: (query) => `https://www.linkedin.com/search/results/all/?keywords=${encodeURIComponent(query)}`
   },
   {
     id: 'amazon',
     name: 'Amazon',
-    color: '#ff9900',
+    color: '#424242',
     url: (query) => `https://www.amazon.com/s?k=${encodeURIComponent(query)}`
   },
   {
     id: 'github',
     name: 'GitHub',
-    color: '#181717',
+    color: '#424242',
     url: (query) => `https://github.com/search?q=${encodeURIComponent(query)}`
   },
   {
     id: 'duckduckgo',
     name: 'DuckDuckGo',
-    color: '#de5833',
+    color: '#424242',
     url: (query) => `https://duckduckgo.com/?q=${encodeURIComponent(query)}`
   },
   {
     id: 'bing',
     name: 'Bing',
-    color: '#008373',
+    color: '#424242',
     url: (query) => `https://www.bing.com/search?q=${encodeURIComponent(query)}`
   },
   {
     id: 'perplexity',
     name: 'Perplexity',
-    color: '#20808d',
+    color: '#424242',
     url: (query) => `https://www.perplexity.ai/search?q=${encodeURIComponent(query)}`
   },
   {
     id: 'chatgpt',
     name: 'ChatGPT',
-    color: '#10a37f',
+    color: '#424242',
     url: (query) => `https://chat.openai.com/?q=${encodeURIComponent(query)}`
   }
 ];
