@@ -154,7 +154,7 @@ async function initExtension() {
     // Add title
     const title = document.createElement('div');
     title.className = 'platform-search-title';
-    title.textContent = '';
+    title.textContent = 'ai mode test';
     container.appendChild(title);
     
     // Add platform buttons
