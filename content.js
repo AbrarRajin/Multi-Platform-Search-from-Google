@@ -79,7 +79,7 @@ let enabledPlatforms = [];
 // Get search query from URL
 function getSearchQuery() {
   const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get('q') || ''; // Search On (TEXT) not visible now
+  return urlParams.get('q') || 'Test Build for Ai-mode'; // Search On (TEXT) not visible now
 }
 
 // Load settings with error handling
