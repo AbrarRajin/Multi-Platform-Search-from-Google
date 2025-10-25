@@ -79,7 +79,7 @@ let enabledPlatforms = [];
 // Get search query from URL
 function getSearchQuery() {
   const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get('q') || ''; // Search On (TEXT) not visible now
+  return urlParams.get('q') || 'ai mode test'; // Search On (TEXT) not visible now NAME GG
 }
 
 // Load settings with error handling
@@ -154,7 +154,7 @@ async function initExtension() {
     // Add title
     const title = document.createElement('div');
     title.className = 'platform-search-title';
-    title.textContent = 'ai mode test';
+    title.textContent = '';
     container.appendChild(title);
     
     // Add platform buttons
