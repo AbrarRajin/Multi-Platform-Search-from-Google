@@ -71,6 +71,12 @@ const PLATFORMS = [
     name: 'ChatGPT',
     color: '#424242',
     url: (query) => `https://chat.openai.com/?q=${encodeURIComponent(query)}`
+  },
+  {
+    id: 'googleai',
+    name: 'Ai Mode',
+    color: '#424242',
+    url: (query) => `https://www.google.com/search?udm=50&q=${encodeURIComponent(query)}`
   }
 ];
 
@@ -79,7 +85,7 @@ let enabledPlatforms = [];
 // Get search query from URL
 function getSearchQuery() {
   const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get('q') || 'ai mode test'; // Search On (TEXT) not visible now NAME GG
+  return urlParams.get('q') || ''; 
 }
 
 // Load settings with error handling
@@ -154,7 +160,7 @@ async function initExtension() {
     // Add title
     const title = document.createElement('div');
     title.className = 'platform-search-title';
-    title.textContent = '';
+    title.textContent = ''; // NAME ON TOPGG
     container.appendChild(title);
     
     // Add platform buttons

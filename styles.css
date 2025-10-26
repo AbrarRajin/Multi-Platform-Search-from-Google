@@ -7,7 +7,7 @@
   background: transparent;
   border-radius: 0;
   box-shadow: none;
-  width: 160px;
+  width: 180px;
   box-sizing: border-box;
 
   /* Scroll settings */
@@ -45,7 +45,7 @@
 }
 
 .platform-search-title {
-  font-size: 13px;
+  font-size: 10px;
   font-weight: 500;
   color: #70757a;
   margin-bottom: 12px;
@@ -60,7 +60,7 @@
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
-  padding: 12px 16px;
+  padding: 5px 16px;
   color: white !important;
   border: none;
   border-radius: 8px;
