@@ -2,7 +2,7 @@
 A browser extension that lets you instantly jump to different websites with the same search query.
 
 
-> 📗 Latest Update: 📗
+> ## 📗 Changelog 📗
 - v_1.02: Added Google Ai Mode which takes the search to Google Ai mode.
 - v_1.01: First Release
 
