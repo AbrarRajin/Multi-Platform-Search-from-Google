@@ -58,6 +58,11 @@ const PLATFORMS = [
     id: 'chatgpt',
     name: 'ChatGPT',
     color: '#10a37f'
+  },
+  {
+    id: 'googleai',
+    name: 'Google Ai Mode',
+    color: '#29db52ff'
   }
 ];
 
