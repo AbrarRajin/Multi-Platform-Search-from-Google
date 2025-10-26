@@ -9,11 +9,7 @@ A browser extension that lets you instantly jump to different websites with the 
 > ## 📖 Overview  
 
 Multi-Platform-Search is a browser extension that enhances your Google search experience by adding quick search buttons for popular platforms. Instead of manually searching on YouTube, Reddit, GitHub, or other platforms, simply click a button and your Google query is instantly searched on your chosen platform.
-<center>
-<img src="/images/Google-Result.png" height="225px" width="400">  
 
-<font size="30">👇  </font> 
+<img src="/images/Google-Result.png">
 
-<img src="/images/To-Youtube-Result.png" height="225px" width="400">
-</center> 
 > ## 
