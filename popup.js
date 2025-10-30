@@ -67,17 +67,148 @@ const PLATFORMS = [
 ];
 
 let enabledPlatforms = [];
+let openInNewTab = true; // Default to true
+let customCSS = ''; // Custom CSS storage
 
 // Load settings with error handling
-chrome.storage.sync.get(['enabledPlatforms'], (result) => {
+chrome.storage.sync.get(['enabledPlatforms', 'openInNewTab', 'customCSS'], (result) => {
   if (chrome.runtime.lastError) {
     console.error('Error loading settings:', chrome.runtime.lastError);
     enabledPlatforms = ['youtube'];
+    openInNewTab = true;
+    customCSS = '';
   } else {
     enabledPlatforms = result.enabledPlatforms || ['youtube'];
+    openInNewTab = result.openInNewTab !== undefined ? result.openInNewTab : true;
+    customCSS = result.customCSS || '';
   }
   renderPlatforms();
+  renderNewTabToggle();
+  renderCSSEditor();
 });
+
+// Render new tab toggle
+function renderNewTabToggle() {
+  const toggle = document.getElementById('newTabToggle');
+  const setting = document.getElementById('newTabSetting');
+  
+  if (openInNewTab) {
+    toggle.classList.add('active');
+  } else {
+    toggle.classList.remove('active');
+  }
+  
+  setting.addEventListener('click', () => {
+    toggleNewTab();
+  });
+}
+
+// Toggle new tab setting
+function toggleNewTab() {
+  openInNewTab = !openInNewTab;
+  
+  chrome.storage.sync.set({ openInNewTab }, () => {
+    if (chrome.runtime.lastError) {
+      console.error('Error saving new tab setting:', chrome.runtime.lastError);
+      return;
+    }
+    
+    renderNewTabToggle();
+    
+    // Notify content script to update
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0] && tabs[0].id) {
+        chrome.tabs.sendMessage(tabs[0].id, { action: 'updateButtons' }, (response) => {
+          if (chrome.runtime.lastError) {
+            console.log('Could not update current tab:', chrome.runtime.lastError.message);
+          }
+        });
+      }
+    });
+  });
+}
+
+// Render CSS editor
+function renderCSSEditor() {
+  const cssHeader = document.getElementById('cssHeader');
+  const cssEditorSection = cssHeader.parentElement;
+  const cssTextarea = document.getElementById('customCSS');
+  const saveBtn = document.getElementById('saveCSS');
+  const resetBtn = document.getElementById('resetCSS');
+  const cssStatus = document.getElementById('cssStatus');
+  
+  // Load saved CSS into textarea
+  cssTextarea.value = customCSS;
+  
+  // Toggle CSS editor
+  cssHeader.addEventListener('click', () => {
+    cssEditorSection.classList.toggle('expanded');
+  });
+  
+  // Save CSS
+  saveBtn.addEventListener('click', () => {
+    customCSS = cssTextarea.value;
+    
+    chrome.storage.sync.set({ customCSS }, () => {
+      if (chrome.runtime.lastError) {
+        console.error('Error saving CSS:', chrome.runtime.lastError);
+        showStatus('Error saving CSS', 'error');
+        return;
+      }
+      
+      showStatus('CSS saved successfully!', 'success');
+      
+      // Notify content script to update
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs[0] && tabs[0].id) {
+          chrome.tabs.sendMessage(tabs[0].id, { action: 'updateButtons' }, (response) => {
+            if (chrome.runtime.lastError) {
+              console.log('Could not update current tab:', chrome.runtime.lastError.message);
+            }
+          });
+        }
+      });
+    });
+  });
+  
+  // Reset CSS
+  resetBtn.addEventListener('click', () => {
+    if (confirm('Are you sure you want to reset to default styles?')) {
+      customCSS = '';
+      cssTextarea.value = '';
+      
+      chrome.storage.sync.set({ customCSS: '' }, () => {
+        if (chrome.runtime.lastError) {
+          console.error('Error resetting CSS:', chrome.runtime.lastError);
+          showStatus('Error resetting CSS', 'error');
+          return;
+        }
+        
+        showStatus('CSS reset to default', 'success');
+        
+        // Notify content script to update
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          if (tabs[0] && tabs[0].id) {
+            chrome.tabs.sendMessage(tabs[0].id, { action: 'updateButtons' }, (response) => {
+              if (chrome.runtime.lastError) {
+                console.log('Could not update current tab:', chrome.runtime.lastError.message);
+              }
+            });
+          }
+        });
+      });
+    }
+  });
+  
+  function showStatus(message, type) {
+    cssStatus.textContent = message;
+    cssStatus.className = `css-status ${type}`;
+    setTimeout(() => {
+      cssStatus.textContent = '';
+      cssStatus.className = 'css-status';
+    }, 3000);
+  }
+}
 
 // Render platform list
 function renderPlatforms() {

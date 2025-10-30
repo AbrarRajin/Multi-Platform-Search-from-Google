@@ -33,6 +33,165 @@
       opacity: 0.9;
     }
 
+    .settings-section {
+      padding: 12px;
+      background: white;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .setting-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .setting-item:hover {
+      background: #f1f3f4;
+    }
+
+    .setting-info {
+      flex: 1;
+    }
+
+    .setting-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #202124;
+      margin-bottom: 2px;
+    }
+
+    .setting-description {
+      font-size: 11px;
+      color: #5f6368;
+    }
+
+    .css-editor-section {
+      background: white;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .css-header {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: background 0.2s;
+      user-select: none;
+    }
+
+    .css-header:hover {
+      background: #f8f9fa;
+    }
+
+    .css-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #202124;
+    }
+
+    .css-header svg {
+      color: #5f6368;
+    }
+
+    .chevron {
+      transition: transform 0.3s;
+    }
+
+    .css-editor-section.expanded .chevron {
+      transform: rotate(180deg);
+    }
+
+    .css-editor-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .css-editor-section.expanded .css-editor-content {
+      max-height: 400px;
+    }
+
+    .css-textarea {
+      width: 100%;
+      min-height: 180px;
+      padding: 12px;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: 12px;
+      resize: vertical;
+      background: #f8f9fa;
+      color: #202124;
+      margin: 12px 16px 0 16px;
+      width: calc(100% - 32px);
+    }
+
+    .css-textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+    }
+
+    .css-actions {
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px;
+    }
+
+    .css-btn {
+      flex: 1;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .css-btn-save {
+      background: #667eea;
+      color: white;
+    }
+
+    .css-btn-save:hover {
+      background: #5568d3;
+      transform: translateY(-1px);
+    }
+
+    .css-btn-reset {
+      background: #f1f3f4;
+      color: #5f6368;
+    }
+
+    .css-btn-reset:hover {
+      background: #e8eaed;
+    }
+
+    .css-status {
+      padding: 0 16px 12px 16px;
+      font-size: 12px;
+      text-align: center;
+      min-height: 18px;
+    }
+
+    .css-status.success {
+      color: #1e8e3e;
+    }
+
+    .css-status.error {
+      color: #d93025;
+    }
+
     .platforms {
       padding: 12px;
       max-height: 500px;
@@ -142,6 +301,54 @@
   <div class="header">
     <h1>Multi-Platform Search</h1>
     <p>Choose which platforms to search</p>
+  </div>
+
+  <div class="settings-section">
+    <div class="setting-item" id="newTabSetting">
+      <div class="setting-info">
+        <div class="setting-name">Open in new tab</div>
+        <div class="setting-description">Open search results in a new tab</div>
+      </div>
+      <div class="toggle-switch" id="newTabToggle">
+        <div class="toggle-slider"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="css-editor-section">
+    <div class="css-header" id="cssHeader">
+      <div class="css-header-left">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Custom Button CSS</span>
+      </div>
+      <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="css-editor-content" id="cssEditorContent">
+      <textarea 
+        id="customCSS" 
+        class="css-textarea"
+        placeholder="/* Example CSS:
+.platform-search-btn {
+  border-radius: 20px;
+  font-size: 15px;
+  padding: 8px 18px;
+}
+
+.platform-search-btn:hover {
+  transform: scale(1.05);
+}
+*/"
+      ></textarea>
+      <div class="css-actions">
+        <button id="saveCSS" class="css-btn css-btn-save">Save CSS</button>
+        <button id="resetCSS" class="css-btn css-btn-reset">Reset to Default</button>
+      </div>
+      <div class="css-status" id="cssStatus"></div>
+    </div>
   </div>
 
   <div class="platforms" id="platforms"></div>

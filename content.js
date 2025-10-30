@@ -81,6 +81,8 @@ const PLATFORMS = [
 ];
 
 let enabledPlatforms = [];
+let openInNewTab = true; // Default to true
+let customCSS = ''; // Custom CSS storage
 
 // Get search query from URL
 function getSearchQuery() {
@@ -88,22 +90,41 @@ function getSearchQuery() {
   return urlParams.get('q') || ''; 
 }
 
+// Check if we're on Google Images
+function isGoogleImages() {
+  const urlParams = new URLSearchParams(window.location.search);
+  // Check for both tbm=isch (old format) and udm=2 (new format)
+  return urlParams.get('tbm') === 'isch' || urlParams.get('udm') === '2';
+}
+
+// Check if we're on AI Mode
+function isAIMode() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('udm') === '50';
+}
+
 // Load settings with error handling
 async function loadSettings() {
   return new Promise((resolve) => {
     try {
-      chrome.storage.sync.get(['enabledPlatforms'], (result) => {
+      chrome.storage.sync.get(['enabledPlatforms', 'openInNewTab', 'customCSS'], (result) => {
         if (chrome.runtime.lastError) {
           console.error('Error loading settings:', chrome.runtime.lastError);
           enabledPlatforms = ['youtube']; // fallback
+          openInNewTab = true; // fallback
+          customCSS = ''; // fallback
         } else {
           enabledPlatforms = result.enabledPlatforms || ['youtube'];
+          openInNewTab = result.openInNewTab !== undefined ? result.openInNewTab : true;
+          customCSS = result.customCSS || '';
         }
         resolve();
       });
     } catch (error) {
       console.error('Failed to load settings:', error);
       enabledPlatforms = ['youtube']; // fallback
+      openInNewTab = true; // fallback
+      customCSS = ''; // fallback
       resolve();
     }
   });
@@ -130,10 +151,31 @@ function createPlatformButton(platform, query) {
   
   button.addEventListener('click', (e) => {
     e.preventDefault();
-    window.open(platform.url(query), '_blank');
+    if (openInNewTab) {
+      window.open(platform.url(query), '_blank');
+    } else {
+      window.location.href = platform.url(query);
+    }
   });
   
   return button;
+}
+
+// Apply custom CSS
+function applyCustomCSS() {
+  // Remove existing custom CSS if any
+  const existingStyle = document.getElementById('platform-search-custom-css');
+  if (existingStyle) {
+    existingStyle.remove();
+  }
+  
+  // If there's custom CSS, inject it
+  if (customCSS && customCSS.trim() !== '') {
+    const styleElement = document.createElement('style');
+    styleElement.id = 'platform-search-custom-css';
+    styleElement.textContent = customCSS;
+    document.head.appendChild(styleElement);
+  }
 }
 
 // Initialize extension
@@ -145,7 +187,16 @@ async function initExtension() {
       existingContainer.remove();
     }
     
+    // Don't show buttons on Google Images
+    if (isGoogleImages()) {
+      console.log('Google Images detected - not showing platform buttons');
+      return;
+    }
+    
     await loadSettings();
+    
+    // Apply custom CSS
+    applyCustomCSS();
     
     const query = getSearchQuery();
     if (!query || enabledPlatforms.length === 0) {
@@ -179,7 +230,14 @@ async function initExtension() {
     if (searchContainer) {
       // Create a fixed left sidebar that scrolls with page
       container.style.position = 'fixed';
-      container.style.left = '20px';
+      
+      // Adjust positioning for AI Mode to avoid Google's sidebar
+      if (isAIMode()) {
+        container.style.left = '100px'; // Move further right to avoid AI sidebar
+      } else {
+        container.style.left = '20px';
+      }
+      
       container.style.top = '180px';
       container.style.zIndex = '100';
       container.style.maxHeight = 'calc(100vh - 200px)';
