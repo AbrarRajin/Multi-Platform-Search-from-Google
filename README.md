@@ -3,6 +3,14 @@ A browser extension that lets you instantly jump to different websites with the 
 
 
 > ## 📗 Changelog  
+- v_1.10:  
+```
+Added Custom CSS field.  
+New Buttons.  
+Open in new tab toggle.
+fixed Google images overlap.  
+fixed Google ai mode visual bug.
+```
 - v_1.02: Added Google Ai Mode which takes the search to Google Ai mode.
 - v_1.01: First Release
 
