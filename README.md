@@ -8,8 +8,8 @@ A browser extension that lets you instantly jump to different websites with the 
 Added Custom CSS field.  
 New Buttons.  
 Open in new tab toggle.
-fixed Google images overlap.  
-fixed Google ai mode visual bug.
+Fixed Google images overlap.  
+Fixed Google ai mode visual bug.
 ```
 - v_1.02: Added Google Ai Mode which takes the search to Google Ai mode.
 - v_1.01: First Release
