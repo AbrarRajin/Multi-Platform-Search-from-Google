@@ -33,6 +33,53 @@
       opacity: 0.9;
     }
 
+    /* Tab Navigation */
+    .tab-nav {
+      display: flex;
+      background: white;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 500;
+      color: #5f6368;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .tab-btn:hover {
+      background: #f8f9fa;
+    }
+
+    .tab-btn.active {
+      color: #667eea;
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #667eea;
+    }
+
+    /* Tab Content */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
     .settings-section {
       padding: 12px;
       background: white;
@@ -48,6 +95,11 @@
       border-radius: 8px;
       cursor: pointer;
       transition: background 0.2s;
+      margin-bottom: 8px;
+    }
+
+    .setting-item:last-child {
+      margin-bottom: 0;
     }
 
     .setting-item:hover {
@@ -300,38 +352,70 @@
 <body>
   <div class="header">
     <h1>Multi-Platform Search</h1>
-    <p>Choose which platforms to search</p>
+    <p>Customize your search experience</p>
   </div>
 
-  <div class="settings-section">
-    <div class="setting-item" id="newTabSetting">
-      <div class="setting-info">
-        <div class="setting-name">Open in new tab</div>
-        <div class="setting-description">Open search results in a new tab</div>
+  <!-- Tab Navigation -->
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="settings">Settings</button>
+    <button class="tab-btn" data-tab="platforms">Platforms</button>
+  </div>
+
+  <!-- Settings Tab -->
+  <div class="tab-content active" id="settingsTab">
+    <div class="settings-section">
+      <!-- Master Toggle -->
+      <div class="setting-item" id="masterToggleSetting">
+        <div class="setting-info">
+          <div class="setting-name">Enable Extension</div>
+          <div class="setting-description">Show/hide all platform buttons</div>
+        </div>
+        <div class="toggle-switch active" id="masterToggle">
+          <div class="toggle-slider"></div>
+        </div>
       </div>
-      <div class="toggle-switch" id="newTabToggle">
-        <div class="toggle-slider"></div>
+
+      <!-- New Tab Toggle -->
+      <div class="setting-item" id="newTabSetting">
+        <div class="setting-info">
+          <div class="setting-name">Open in new tab</div>
+          <div class="setting-description">Open search results in a new tab</div>
+        </div>
+        <div class="toggle-switch" id="newTabToggle">
+          <div class="toggle-slider"></div>
+        </div>
+      </div>
+
+      <!-- Logo Only Toggle -->
+      <div class="setting-item" id="logoOnlySetting">
+        <div class="setting-info">
+          <div class="setting-name">Logo only mode</div>
+          <div class="setting-description">Show only icons (for smaller screens)</div>
+        </div>
+        <div class="toggle-switch" id="logoOnlyToggle">
+          <div class="toggle-slider"></div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="css-editor-section">
-    <div class="css-header" id="cssHeader">
-      <div class="css-header-left">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <!-- CSS Editor -->
+    <div class="css-editor-section">
+      <div class="css-header" id="cssHeader">
+        <div class="css-header-left">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span>Custom Button CSS</span>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <span>Custom Button CSS</span>
       </div>
-      <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <div class="css-editor-content" id="cssEditorContent">
-      <textarea 
-        id="customCSS" 
-        class="css-textarea"
-        placeholder="/* Example CSS:
+      <div class="css-editor-content" id="cssEditorContent">
+        <textarea 
+          id="customCSS" 
+          class="css-textarea"
+          placeholder="/* Example CSS:
 .platform-search-btn {
   border-radius: 20px;
   font-size: 15px;
@@ -342,19 +426,22 @@
   transform: scale(1.05);
 }
 */"
-      ></textarea>
-      <div class="css-actions">
-        <button id="saveCSS" class="css-btn css-btn-save">Save CSS</button>
-        <button id="resetCSS" class="css-btn css-btn-reset">Reset to Default</button>
+        ></textarea>
+        <div class="css-actions">
+          <button id="saveCSS" class="css-btn css-btn-save">Save CSS</button>
+          <button id="resetCSS" class="css-btn css-btn-reset">Reset to Default</button>
+        </div>
+        <div class="css-status" id="cssStatus"></div>
       </div>
-      <div class="css-status" id="cssStatus"></div>
     </div>
   </div>
 
-  <div class="platforms" id="platforms"></div>
-
-  <div class="footer">
-    Select platforms to show search buttons on Google
+  <!-- Platforms Tab -->
+  <div class="tab-content" id="platformsTab">
+    <div class="platforms" id="platforms"></div>
+    <div class="footer">
+      Select platforms to show search buttons on Google
+    </div>
   </div>
 
   <script src="popup.js"></script>

@@ -67,25 +67,89 @@ const PLATFORMS = [
 ];
 
 let enabledPlatforms = [];
-let openInNewTab = true; // Default to true
-let customCSS = ''; // Custom CSS storage
+let openInNewTab = true;
+let customCSS = '';
+let extensionEnabled = true;
+let logoOnlyMode = false;
 
 // Load settings with error handling
-chrome.storage.sync.get(['enabledPlatforms', 'openInNewTab', 'customCSS'], (result) => {
+chrome.storage.sync.get(['enabledPlatforms', 'openInNewTab', 'customCSS', 'extensionEnabled', 'logoOnlyMode'], (result) => {
   if (chrome.runtime.lastError) {
     console.error('Error loading settings:', chrome.runtime.lastError);
     enabledPlatforms = ['youtube'];
     openInNewTab = true;
     customCSS = '';
+    extensionEnabled = true;
+    logoOnlyMode = false;
   } else {
     enabledPlatforms = result.enabledPlatforms || ['youtube'];
     openInNewTab = result.openInNewTab !== undefined ? result.openInNewTab : true;
     customCSS = result.customCSS || '';
+    extensionEnabled = result.extensionEnabled !== undefined ? result.extensionEnabled : true;
+    logoOnlyMode = result.logoOnlyMode !== undefined ? result.logoOnlyMode : false;
   }
   renderPlatforms();
-  renderNewTabToggle();
+  renderToggles();
   renderCSSEditor();
+  setupTabs();
 });
+
+// Setup tab switching
+function setupTabs() {
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.dataset.tab;
+      
+      // Update active states
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabContents.forEach(c => c.classList.remove('active'));
+      
+      btn.classList.add('active');
+      document.getElementById(`${targetTab}Tab`).classList.add('active');
+    });
+  });
+}
+
+// Render all toggles
+function renderToggles() {
+  renderMasterToggle();
+  renderNewTabToggle();
+  renderLogoOnlyToggle();
+}
+
+// Render master toggle
+function renderMasterToggle() {
+  const toggle = document.getElementById('masterToggle');
+  const setting = document.getElementById('masterToggleSetting');
+  
+  if (extensionEnabled) {
+    toggle.classList.add('active');
+  } else {
+    toggle.classList.remove('active');
+  }
+  
+  setting.addEventListener('click', () => {
+    toggleMaster();
+  });
+}
+
+// Toggle master switch
+function toggleMaster() {
+  extensionEnabled = !extensionEnabled;
+  
+  chrome.storage.sync.set({ extensionEnabled }, () => {
+    if (chrome.runtime.lastError) {
+      console.error('Error saving master toggle:', chrome.runtime.lastError);
+      return;
+    }
+    
+    renderMasterToggle();
+    notifyContentScript();
+  });
+}
 
 // Render new tab toggle
 function renderNewTabToggle() {
@@ -114,17 +178,51 @@ function toggleNewTab() {
     }
     
     renderNewTabToggle();
+    notifyContentScript();
+  });
+}
+
+// Render logo only toggle
+function renderLogoOnlyToggle() {
+  const toggle = document.getElementById('logoOnlyToggle');
+  const setting = document.getElementById('logoOnlySetting');
+  
+  if (logoOnlyMode) {
+    toggle.classList.add('active');
+  } else {
+    toggle.classList.remove('active');
+  }
+  
+  setting.addEventListener('click', () => {
+    toggleLogoOnly();
+  });
+}
+
+// Toggle logo only mode
+function toggleLogoOnly() {
+  logoOnlyMode = !logoOnlyMode;
+  
+  chrome.storage.sync.set({ logoOnlyMode }, () => {
+    if (chrome.runtime.lastError) {
+      console.error('Error saving logo only setting:', chrome.runtime.lastError);
+      return;
+    }
     
-    // Notify content script to update
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0] && tabs[0].id) {
-        chrome.tabs.sendMessage(tabs[0].id, { action: 'updateButtons' }, (response) => {
-          if (chrome.runtime.lastError) {
-            console.log('Could not update current tab:', chrome.runtime.lastError.message);
-          }
-        });
-      }
-    });
+    renderLogoOnlyToggle();
+    notifyContentScript();
+  });
+}
+
+// Notify content script to update
+function notifyContentScript() {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs[0] && tabs[0].id) {
+      chrome.tabs.sendMessage(tabs[0].id, { action: 'updateButtons' }, (response) => {
+        if (chrome.runtime.lastError) {
+          console.log('Could not update current tab:', chrome.runtime.lastError.message);
+        }
+      });
+    }
   });
 }
 
@@ -157,17 +255,7 @@ function renderCSSEditor() {
       }
       
       showStatus('CSS saved successfully!', 'success');
-      
-      // Notify content script to update
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (tabs[0] && tabs[0].id) {
-          chrome.tabs.sendMessage(tabs[0].id, { action: 'updateButtons' }, (response) => {
-            if (chrome.runtime.lastError) {
-              console.log('Could not update current tab:', chrome.runtime.lastError.message);
-            }
-          });
-        }
-      });
+      notifyContentScript();
     });
   });
   
@@ -185,17 +273,7 @@ function renderCSSEditor() {
         }
         
         showStatus('CSS reset to default', 'success');
-        
-        // Notify content script to update
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          if (tabs[0] && tabs[0].id) {
-            chrome.tabs.sendMessage(tabs[0].id, { action: 'updateButtons' }, (response) => {
-              if (chrome.runtime.lastError) {
-                console.log('Could not update current tab:', chrome.runtime.lastError.message);
-              }
-            });
-          }
-        });
+        notifyContentScript();
       });
     }
   });
@@ -284,17 +362,6 @@ function togglePlatform(platformId) {
     }
     
     renderPlatforms();
-    
-    // Notify content script to update
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0] && tabs[0].id) {
-        chrome.tabs.sendMessage(tabs[0].id, { action: 'updateButtons' }, (response) => {
-          // Ignore errors - tab might not have content script loaded
-          if (chrome.runtime.lastError) {
-            console.log('Could not update current tab:', chrome.runtime.lastError.message);
-          }
-        });
-      }
-    });
+    notifyContentScript();
   });
 }

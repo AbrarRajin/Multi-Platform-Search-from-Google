@@ -1,4 +1,4 @@
-// Platform configurations
+// Platform configurations - Updated with new features (master toggle, logo-only mode, tab interface)
 const PLATFORMS = [
   { 
     id: 'youtube',
@@ -81,8 +81,10 @@ const PLATFORMS = [
 ];
 
 let enabledPlatforms = [];
-let openInNewTab = true; // Default to true
-let customCSS = ''; // Custom CSS storage
+let openInNewTab = true;
+let customCSS = '';
+let extensionEnabled = true;
+let logoOnlyMode = false;
 
 // Get search query from URL
 function getSearchQuery() {
@@ -107,24 +109,30 @@ function isAIMode() {
 async function loadSettings() {
   return new Promise((resolve) => {
     try {
-      chrome.storage.sync.get(['enabledPlatforms', 'openInNewTab', 'customCSS'], (result) => {
+      chrome.storage.sync.get(['enabledPlatforms', 'openInNewTab', 'customCSS', 'extensionEnabled', 'logoOnlyMode'], (result) => {
         if (chrome.runtime.lastError) {
           console.error('Error loading settings:', chrome.runtime.lastError);
-          enabledPlatforms = ['youtube']; // fallback
-          openInNewTab = true; // fallback
-          customCSS = ''; // fallback
+          enabledPlatforms = ['youtube'];
+          openInNewTab = true;
+          customCSS = '';
+          extensionEnabled = true;
+          logoOnlyMode = false;
         } else {
           enabledPlatforms = result.enabledPlatforms || ['youtube'];
           openInNewTab = result.openInNewTab !== undefined ? result.openInNewTab : true;
           customCSS = result.customCSS || '';
+          extensionEnabled = result.extensionEnabled !== undefined ? result.extensionEnabled : true;
+          logoOnlyMode = result.logoOnlyMode !== undefined ? result.logoOnlyMode : false;
         }
         resolve();
       });
     } catch (error) {
       console.error('Failed to load settings:', error);
-      enabledPlatforms = ['youtube']; // fallback
-      openInNewTab = true; // fallback
-      customCSS = ''; // fallback
+      enabledPlatforms = ['youtube'];
+      openInNewTab = true;
+      customCSS = '';
+      extensionEnabled = true;
+      logoOnlyMode = false;
       resolve();
     }
   });
@@ -144,7 +152,6 @@ function createPlatformButton(platform, query) {
   // Create text span
   const textSpan = document.createElement('span');
   textSpan.textContent = `${platform.name}`;
-  //textSpan.textContent = `Search ${platform.name}`;
   
   button.appendChild(iconDiv);
   button.appendChild(textSpan);
@@ -187,13 +194,19 @@ async function initExtension() {
       existingContainer.remove();
     }
     
+    await loadSettings();
+    
+    // Check if extension is enabled
+    if (!extensionEnabled) {
+      console.log('Extension is disabled');
+      return;
+    }
+    
     // Don't show buttons on Google Images
     if (isGoogleImages()) {
       console.log('Google Images detected - not showing platform buttons');
       return;
     }
-    
-    await loadSettings();
     
     // Apply custom CSS
     applyCustomCSS();
@@ -208,10 +221,15 @@ async function initExtension() {
     const container = document.createElement('div');
     container.id = 'platform-search-container';
     
-    // Add title
+    // Add logo-only class if enabled
+    if (logoOnlyMode) {
+      container.classList.add('logo-only');
+    }
+    
+    // Add title (will be hidden in logo-only mode by CSS)
     const title = document.createElement('div');
     title.className = 'platform-search-title';
-    title.textContent = ''; // NAME ON TOPGG
+    title.textContent = ''; // NAME ON TOP
     container.appendChild(title);
     
     // Add platform buttons

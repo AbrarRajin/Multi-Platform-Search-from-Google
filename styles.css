@@ -17,6 +17,12 @@
   position: relative;
 }
 
+/* Logo-only mode - narrower container */
+#platform-search-container.logo-only {
+  width: 50px;
+  padding-right: 0;
+}
+
 /* Custom scrollbar */
 #platform-search-container::-webkit-scrollbar {
   width: 6px;
@@ -55,6 +61,11 @@
   letter-spacing: 0.5px;
 }
 
+/* Hide title in logo-only mode */
+#platform-search-container.logo-only .platform-search-title {
+  display: none;
+}
+
 .platform-search-btn {
   display: flex !important;
   align-items: center;
@@ -74,6 +85,19 @@
   text-decoration: none !important;
   user-select: none;
   box-sizing: border-box;
+}
+
+/* Logo-only mode - centered icon only */
+#platform-search-container.logo-only .platform-search-btn {
+  justify-content: center;
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+  gap: 0;
+}
+
+#platform-search-container.logo-only .platform-search-btn span {
+  display: none;
 }
 
 .platform-icon-bg {
