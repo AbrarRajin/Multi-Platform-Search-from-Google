@@ -11,6 +11,7 @@ Open in new tab toggle.
 Fixed Google images overlap.  
 Fixed Google ai mode visual bug.
 ```
+- v_1.03: Icon Only Mode, Toggle On/Off, Separate Tabs for Settings and Website Toggle.
 - v_1.02: Added Google Ai Mode which takes the search to Google Ai mode.
 - v_1.01: First Release
 
