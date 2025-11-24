@@ -249,9 +249,16 @@ async function initExtension() {
       // Create a fixed left sidebar that scrolls with page
       container.style.position = 'fixed';
       
-      // Adjust positioning for AI Mode to avoid Google's sidebar
+      // Responsive positioning with better scaling detection (Option 3)
+      const viewportWidth = window.innerWidth;
       if (isAIMode()) {
-        container.style.left = '100px'; // Move further right to avoid AI sidebar
+        if (viewportWidth < 1400) {
+          // Hide on smaller/zoomed screens in AI Mode
+          console.log('AI Mode with small viewport - hiding platform buttons');
+          return;
+        } else {
+          container.style.left = '140px'; // More space for AI sidebar
+        }
       } else {
         container.style.left = '20px';
       }
