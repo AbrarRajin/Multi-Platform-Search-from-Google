@@ -4,13 +4,13 @@ A browser extension that lets you instantly jump to different websites with the 
 
 > ## 📗 Changelog  
 - v_1.10:  
-```
-Added Custom CSS field.  
-New Buttons.  
-Open in new tab toggle.
-Fixed Google images overlap.  
-Fixed Google ai mode visual bug.
-```
+    ```
+    Added Custom CSS field.  
+    New Buttons.  
+    Open in new tab toggle.
+    Fixed Google images overlap.  
+    Fixed Google ai mode visual bug.
+    ```
 - v_1.03: Icon Only Mode, Toggle On/Off, Separate Tabs for Settings and Website Toggle.
 - v_1.02: Added Google Ai Mode which takes the search to Google Ai mode.
 - v_1.01: First Release
@@ -21,4 +21,12 @@ Multi-Platform-Search is a browser extension that enhances your Google search ex
 
 <img src="/images/Google-Result.png">
 
-> ## 
+> ## 🎯 Roadmap
+- Fix the small screensize issue
+    - retractable one button setup
+    - more compact buttons with image only mode
+    -
+- Add custom website jumper
+
+> ## Bugs
+- toggles within popup works once. popup needs to be reopened.
