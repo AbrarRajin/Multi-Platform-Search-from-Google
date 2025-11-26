@@ -8,11 +8,11 @@ Multi-Platform-Search is a browser extension that enhances your Google search ex
 ---
 
 > ## ✅ Changelog  
-- v_1.11:  
+- __v_1.11:__  
     ```
     Fixed Button overlapping bug on ai-mode.
     ```
-- v_1.10:  
+- __v_1.10__:  
     ```
     Added Custom CSS field.  
     New Buttons.  
@@ -20,16 +20,16 @@ Multi-Platform-Search is a browser extension that enhances your Google search ex
     Fixed Google images overlap.  
     Fixed Google ai mode visual bug.
     ```
-- v_1.03: 
+- __v_1.03:__ 
     ```
     Icon Only Mode, Toggle On/Off, Separate Tabs for Settings and Website Toggle.
     ```
 
-- v_1.02: 
+- __v_1.02:__
     ```
     Added Google Ai Mode which takes the search to Google Ai mode.
     ```
-- v_1.01: __First Release__
+- __v_1.01:__ __First Release__
 
 
 <img src="/images/Google-Result.png">
